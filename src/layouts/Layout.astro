@@ -1,5 +1,6 @@
 ---
 import { Font } from "astro:assets";
+import { ClientRouter } from "astro:transitions";
 import { PUBLIC_GOOGLE_SITE_VERIFICATION } from "astro:env/client";
 import { SITE } from "@/config";
 import "@/styles/global.css";
@@ -133,6 +134,31 @@ const structuredData = {
         />
       )
     }
+
+    <ClientRouter />
+
+    <script is:inline>
+      // If embedded in a (cross-origin) iframe, force full-page navigations:
+      // Astro's ClientRouter crashes the renderer on client-side nav inside an iframe.
+      (function () {
+        var inIframe = false;
+        try {
+          inIframe = window.self !== window.top;
+        } catch (e) {
+          inIframe = true;
+        }
+        if (inIframe) {
+          document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll("a[href]").forEach(function (a) {
+              var href = a.getAttribute("href") || "";
+              if (href.charAt(0) === "/" || href.indexOf("blog.kyriexu.com") !== -1) {
+                a.setAttribute("data-astro-reload", "");
+              }
+            });
+          });
+        }
+      })();
+    </script>
 
     <!-- Minimal inline script to prevent FOUC - sets theme immediately -->
     <script is:inline>
