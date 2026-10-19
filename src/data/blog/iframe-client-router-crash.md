@@ -5,7 +5,6 @@ pubDatetime: 2026-10-19T18:00:00+08:00
 tags:
   - astro
   - debug
-draft: true
 ---
 
 ## 背景
